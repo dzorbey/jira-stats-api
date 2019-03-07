@@ -46,7 +46,7 @@ public class JiraStatsControllerImplTesting {
   
   @PostConstruct
   public void initilizeClient() {
-	    client = new Client("", "");
+	    client = new Client("zorbey.gokyildiz@gmail.com", "123456@1a");
   }
   
 
@@ -165,54 +165,37 @@ public class JiraStatsControllerImplTesting {
   
   public String getProjects() throws IOException {
 	  
-	  System.out.println("I am here");
-	  
 	  List<Project> projectList = new ArrayList<Project>();
-	    
-	  HashMap<String, List<String>> resultMap = new HashMap<String, List<String>>();
-
+	  HashMap<String, String> resultMap = new HashMap<String, String>();
 	  
-	  client = new Client("zorbey.gokyildiz@gmail.com", "123456@1a");
-	  if(client.getUser() == null) {
-		  
-		  System.out.println("null");
-	  }else {
-		  System.out.println(client.getUser().toString());
-	  }
+	  client = new Client("", "");
 	  
 	    URI uriPR =
 	        client.getService().getEndpoint(
 	            "https://emagine-reality.atlassian.net/rest/agile/1.0/board/");
 
 	    JsonObject jsonObject = executeHttpRequest(uriPR);
-	  
-	    
 
-	    //System.out.println("json: " + jsonObject.toString());
-
-	    //String boardId = "";
 	    String currentProject = "";
-
 	    for (JsonValue entry : jsonObject.getJsonArray("values")) {
 
-	      JsonObject location = ((JsonObject) entry).getJsonObject("location");
-	      if (location != null) {
+	        JsonObject location = ((JsonObject) entry).getJsonObject("location");
+	        if (location != null) {
 
-	        //boardId = ((JsonObject) entry).get("id").toString();
-	        if (location.get("projectKey") != null) {
-	          currentProject = location.getString("projectKey");
+	        	if (location.get("projectKey") != null) {
+	            currentProject = location.getString("projectKey");
+	          }
 	        }
-	      }
 
-	      if (resultMap.get(currentProject) == null) {
-	        projectList.add(new Project(currentProject));
-	      }
-	    }  
+	        if (resultMap.get(currentProject) == null) {
+	          System.out.println(currentProject);
+	          projectList.add(new Project(currentProject));
+	          resultMap.put(currentProject, "put");
+	        }
+	    }
 
-	    System.out.print(objectMapper.writeValueAsString(new ObjectResponse(projectList)));
+	    //System.out.print(objectMapper.writeValueAsString(new ObjectResponse(projectList)));
 	    return objectMapper.writeValueAsString(new ObjectResponse(projectList));
-	    
-	    //return projectList;
 }
   
   
