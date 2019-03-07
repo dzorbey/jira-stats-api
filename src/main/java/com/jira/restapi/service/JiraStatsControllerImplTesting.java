@@ -46,7 +46,7 @@ public class JiraStatsControllerImplTesting {
   
   @PostConstruct
   public void initilizeClient() {
-	    client = new Client("zorbey.gokyildiz@gmail.com", "123456@1a");
+	    client = new Client("", "");
   }
   
 
