@@ -25,10 +25,21 @@ public class JiraStatsController {
 	@ApiOperation(value = "getProjectsResponse", notes = "Projects")
 	public String play()
 			throws Exception {
-
 		
 		try {
 			return statsService.getProjects();
+		} catch (Exception e1) {
+			return null;//Utility.error(e1.getMessage());
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/boards")
+	@ApiOperation(value = "getBoardsForSelectedProject", notes = "Boards")
+	public String play(@RequestHeader("inputHeader") @ApiParam(value = "The origin of the User Selection", defaultValue = "board") String selected)
+			throws Exception {
+
+		try {
+			return statsService.getBoardsForSelectedProject(selected);
 		} catch (Exception e1) {
 			return null;//Utility.error(e1.getMessage());
 		}

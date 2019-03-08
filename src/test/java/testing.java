@@ -12,7 +12,7 @@ public class testing {
 		
 		JiraStatsControllerImplTesting testing = new JiraStatsControllerImplTesting();
 		
-		System.out.println(testing.getProjects());
+		System.out.println(testing.getBoardsForSelectedProject("ESBEP"));
 		
 		
 	}

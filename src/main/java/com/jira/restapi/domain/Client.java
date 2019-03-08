@@ -203,11 +203,6 @@ public class Client implements Serializable {
     public HttpResponse executeURI(URI endpoint) throws IOException, InterruptedException {
       HttpResponse httpResponse = null;
       
-      
-      System.out.println(endpoint.toString());
-      
-      
-      
       try {
         HttpRequest request =
             getHttpTransport().createRequestFactory().buildGetRequest(
@@ -226,15 +221,5 @@ public class Client implements Serializable {
       }
       return httpResponse;
     }
-
-
-    /**
-     * Clears the cached current Bitbucket user.
-     * 
-     * @since 3.0
-     */
-
-
-
   }
 }

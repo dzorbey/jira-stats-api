@@ -27,8 +27,10 @@ import org.springframework.stereotype.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.http.HttpResponse;
+import com.jira.restapi.domain.Board;
+import com.jira.restapi.domain.BoardResponse;
 import com.jira.restapi.domain.Client;
-import com.jira.restapi.domain.ObjectResponse;
+import com.jira.restapi.domain.ProjectResponse;
 import com.jira.restapi.domain.Project;
 import com.jira.restapi.domain.Relation;
 
@@ -46,7 +48,7 @@ public class JiraStatsControllerImplTesting {
   
   @PostConstruct
   public void initilizeClient() {
-	    client = new Client("zorbey.gokyildiz@gmail.com", "123456@1a");
+	    client = new Client("", "");
   }
   
 
@@ -124,8 +126,7 @@ public class JiraStatsControllerImplTesting {
 
   
   public HashMap<String, List<String>> getBoards() throws IOException {
-	  
-	  
+	  	  
 	    HashMap<String, List<String>> resultMap = new HashMap<String, List<String>>();
 
 	    URI uriPR =
@@ -168,8 +169,6 @@ public class JiraStatsControllerImplTesting {
 	  List<Project> projectList = new ArrayList<Project>();
 	  HashMap<String, String> resultMap = new HashMap<String, String>();
 	  
-	  client = new Client("", "");
-	  
 	    URI uriPR =
 	        client.getService().getEndpoint(
 	            "https://emagine-reality.atlassian.net/rest/agile/1.0/board/");
@@ -195,8 +194,44 @@ public class JiraStatsControllerImplTesting {
 	    }
 
 	    //System.out.print(objectMapper.writeValueAsString(new ObjectResponse(projectList)));
-	    return objectMapper.writeValueAsString(new ObjectResponse(projectList));
+	    return objectMapper.writeValueAsString(new ProjectResponse(projectList));
 }
+  
+
+  public String getBoardsForSelectedProject(String project) throws IOException {
+	  
+	    HashMap<String, List<Board>> resultMap = new HashMap<String, List<Board>>();
+
+	    URI uriPR =
+	        client.getService().getEndpoint(
+	            "https://emagine-reality.atlassian.net/rest/agile/1.0/board/");
+
+	    JsonObject jsonObject = executeHttpRequest(uriPR);
+
+	    String boardId = "";
+	    String currentProject = "";
+
+	    for (JsonValue entry : jsonObject.getJsonArray("values")) {
+
+	      JsonObject location = ((JsonObject) entry).getJsonObject("location");
+	      if (location != null) {
+
+	        boardId = ((JsonObject) entry).get("id").toString();
+	        if (location.get("projectKey") != null) {
+	          currentProject = location.getString("projectKey");
+	        }
+	      }
+
+	      if (resultMap.get(currentProject) == null) {
+	        List<Board> boardList = new ArrayList<Board>();
+	        boardList.add(new Board(boardId));
+	        resultMap.put(currentProject, boardList);
+	      } else {
+	        resultMap.get(currentProject).add(new Board(boardId));
+	      }
+	    }
+	    return objectMapper.writeValueAsString(new BoardResponse(resultMap.get(project)));
+  }
   
   
   

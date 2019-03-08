@@ -1,7 +1,5 @@
 package com.jira.restapi.domain;
 
-import java.util.List;
-
 import javax.validation.Valid;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,21 +11,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @XmlRootElement
-public class ObjectResponse {
+public class Board {
 
-	@JsonProperty("xata")
-	private @Valid List<Project> xata = null;
+	@JsonProperty("name")
+	private @Valid String name = null;
 
-	public ObjectResponse(@Valid List<Project> xata) {
+	public Board(@Valid String name) {
 		super();
-		this.xata = xata;
+		this.name = name;
 	}
 
-	public List<Project> getXata() {
-		return xata;
+	public String getName() {
+		return name;
 	}
 
-	public void setXata(List<Project> xata) {
-		this.xata = xata;
+	public void setName(String name) {
+		this.name = name;
 	}
 }
